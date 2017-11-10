@@ -634,6 +634,12 @@ public class InputParser implements Closeable {
 		} else if (command.equals("INVITE")) {
 			// Somebody is inviting somebody else into a channel.
 			configuration.getListenerManager().onEvent(new InviteEvent(bot, source, sourceUser, message));
+		} else if (command.equals("USERNOTICE")) {
+			// Twitch related event
+			System.out.println("GOT USERNOTICE: " + tags.values());
+
+			sourceUser = createUserIfNull(sourceUser, source);
+			configuration.getListenerManager().onEvent(new MessageEvent(bot, channel, target, source, sourceUser, message, tags));
 		} else if (command.equals("AWAY"))
 			//IRCv3 AWAY notify
 			if (parsedLine.isEmpty())

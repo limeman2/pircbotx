@@ -17,6 +17,7 @@
  */
 package org.pircbotx;
 
+import org.pircbotx.hooks.events.*;
 import org.pircbotx.snapshot.UserSnapshot;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ImmutableList;
@@ -46,56 +47,6 @@ import static org.pircbotx.ReplyConstants.*;
 import org.pircbotx.cap.CapHandler;
 import org.pircbotx.cap.TLSCapHandler;
 import org.pircbotx.exception.IrcException;
-import org.pircbotx.hooks.events.ActionEvent;
-import org.pircbotx.hooks.events.BanListEvent;
-import org.pircbotx.hooks.events.ChannelInfoEvent;
-import org.pircbotx.hooks.events.ConnectEvent;
-import org.pircbotx.hooks.events.FingerEvent;
-import org.pircbotx.hooks.events.HalfOpEvent;
-import org.pircbotx.hooks.events.InviteEvent;
-import org.pircbotx.hooks.events.JoinEvent;
-import org.pircbotx.hooks.events.KickEvent;
-import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.events.ModeEvent;
-import org.pircbotx.hooks.events.MotdEvent;
-import org.pircbotx.hooks.events.NickAlreadyInUseEvent;
-import org.pircbotx.hooks.events.NickChangeEvent;
-import org.pircbotx.hooks.events.NoticeEvent;
-import org.pircbotx.hooks.events.OpEvent;
-import org.pircbotx.hooks.events.OwnerEvent;
-import org.pircbotx.hooks.events.PartEvent;
-import org.pircbotx.hooks.events.PingEvent;
-import org.pircbotx.hooks.events.PrivateMessageEvent;
-import org.pircbotx.hooks.events.QuitEvent;
-import org.pircbotx.hooks.events.RemoveChannelBanEvent;
-import org.pircbotx.hooks.events.RemoveChannelKeyEvent;
-import org.pircbotx.hooks.events.RemoveChannelLimitEvent;
-import org.pircbotx.hooks.events.RemoveInviteOnlyEvent;
-import org.pircbotx.hooks.events.RemoveModeratedEvent;
-import org.pircbotx.hooks.events.RemoveNoExternalMessagesEvent;
-import org.pircbotx.hooks.events.RemovePrivateEvent;
-import org.pircbotx.hooks.events.RemoveSecretEvent;
-import org.pircbotx.hooks.events.RemoveTopicProtectionEvent;
-import org.pircbotx.hooks.events.ServerPingEvent;
-import org.pircbotx.hooks.events.ServerResponseEvent;
-import org.pircbotx.hooks.events.SetChannelBanEvent;
-import org.pircbotx.hooks.events.SetChannelKeyEvent;
-import org.pircbotx.hooks.events.SetChannelLimitEvent;
-import org.pircbotx.hooks.events.SetInviteOnlyEvent;
-import org.pircbotx.hooks.events.SetModeratedEvent;
-import org.pircbotx.hooks.events.SetNoExternalMessagesEvent;
-import org.pircbotx.hooks.events.SetPrivateEvent;
-import org.pircbotx.hooks.events.SetSecretEvent;
-import org.pircbotx.hooks.events.SetTopicProtectionEvent;
-import org.pircbotx.hooks.events.SuperOpEvent;
-import org.pircbotx.hooks.events.TimeEvent;
-import org.pircbotx.hooks.events.TopicEvent;
-import org.pircbotx.hooks.events.UnknownEvent;
-import org.pircbotx.hooks.events.UserListEvent;
-import org.pircbotx.hooks.events.UserModeEvent;
-import org.pircbotx.hooks.events.VersionEvent;
-import org.pircbotx.hooks.events.VoiceEvent;
-import org.pircbotx.hooks.events.WhoisEvent;
 import org.pircbotx.snapshot.ChannelSnapshot;
 import org.pircbotx.snapshot.UserChannelDaoSnapshot;
 import org.slf4j.Marker;
@@ -634,6 +585,12 @@ public class InputParser implements Closeable {
 		} else if (command.equals("INVITE")) {
 			// Somebody is inviting somebody else into a channel.
 			configuration.getListenerManager().onEvent(new InviteEvent(bot, source, sourceUser, message));
+		} else if (command.equals("USERNOTICE")) {
+			// Twitch related event
+			System.out.println("GOT USERNOTICE: " + tags.values());
+
+			sourceUser = createUserIfNull(sourceUser, source);
+			configuration.getListenerManager().onEvent(new UserNoticeEvent(bot, target, message, tags));
 		} else if (command.equals("AWAY"))
 			//IRCv3 AWAY notify
 			if (parsedLine.isEmpty())

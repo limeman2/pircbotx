@@ -147,6 +147,8 @@ public abstract class ListenerAdapter implements Listener {
 			onUserList((UserListEvent) event);
 		else if (event instanceof UserModeEvent)
 			onUserMode((UserModeEvent) event);
+		else if (event instanceof UserNoticeEvent)
+			onUserNotice((UserNoticeEvent) event);
 		else if (event instanceof VersionEvent)
 			onVersion((VersionEvent) event);
 		else if (event instanceof VoiceEvent)
@@ -344,6 +346,9 @@ public abstract class ListenerAdapter implements Listener {
 	}
 
 	public void onUserMode(UserModeEvent event) throws Exception {
+	}
+
+	public void onUserNotice(UserNoticeEvent event) throws Exception {
 	}
 
 	public void onVersion(VersionEvent event) throws Exception {

@@ -19,8 +19,6 @@ package org.pircbotx.hooks.events;
 
 import com.google.common.collect.ImmutableMap;
 import org.pircbotx.PircBotX;
-import org.pircbotx.User;
-import org.pircbotx.UserHostmask;
 import org.pircbotx.hooks.Event;
 
 public class UserNoticeEvent extends Event {
@@ -45,6 +43,10 @@ public class UserNoticeEvent extends Event {
 	public void respondWith(String fullLine) {
 		getBot().sendIRC().message(channelSource, fullLine);
 	}
+
+	public ImmutableMap<String, String> getTags() {
+        return this.tags;
+    }
 
     public long getTimestamp() {
         return 0;

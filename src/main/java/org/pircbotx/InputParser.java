@@ -523,6 +523,7 @@ public class InputParser implements Closeable {
 					configuration.getListenerManager().onEvent(new UnknownEvent(bot, line));
 			} else
 				// An unknown CTCP message - ignore it.
+				System.out.println("Is this a sub? " + line);
 				configuration.getListenerManager().onEvent(new UnknownEvent(bot, line));
 		} else if (command.equals("PRIVMSG") && channel != null) {
 			// This is a normal message to a channel.
